@@ -340,4 +340,27 @@ describe('Set-DOM', function () {
     diff(fragment1, fragment2)
     assert.equal(el1.firstChild.nodeValue, 'hello world 2', 'update nodevalue')
   })
+
+  it('should automatically parse html for diff against document fragment', function () {
+    var fragment = document.createDocumentFragment()
+    var el = document.createElement('div')
+
+    fragment.appendChild(el)
+
+    diff(fragment, '<div><h1>hello world</h1></div>')
+    assert.equal(el.innerHTML, '<h1>hello world</h1>', 'should have updated element')
+  })
+
+  it('should allow multiple root elements in diff against document fragment', function () {
+    var fragment = document.createDocumentFragment()
+    var el1 = document.createElement('div')
+    var el2 = document.createElement('div')
+
+    fragment.appendChild(el1)
+    fragment.appendChild(el2)
+
+    diff(fragment, '<div><h1>hello world</h1></div><div><h2>hi</h2></div>')
+    assert.equal(el1.innerHTML, '<h1>hello world</h1>', 'should have updated first element')
+    assert.equal(el2.innerHTML, '<h2>hi</h2>', 'should have updated second element')
+  })
 })

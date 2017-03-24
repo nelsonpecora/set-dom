@@ -51,6 +51,14 @@ function setDOM (oldNode, newNode) {
  * @param {Node} newNode - The updated HTMLNode.
  */
 function setNode (oldNode, newNode) {
+  if (oldNode.nodeType === DOCUMENT_FRAGMENT_TYPE && newNode.nodeType !== DOCUMENT_FRAGMENT_TYPE) {
+    // Wrap new node in a document fragment, so they can be diffed
+    var newFragment = document.createDocumentFragment()
+
+    newFragment.appendChild(newNode)
+    newNode = newFragment
+  }
+
   if (oldNode.nodeType === newNode.nodeType) {
     // Handle regular element node updates.
     if (oldNode.nodeType === ELEMENT_TYPE) {
